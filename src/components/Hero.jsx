@@ -1,5 +1,7 @@
 import { useRef } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, useScroll, useTransform } from 'framer-motion';
+import bgImage from '../assets/images/bg.jpg';
 
 export default function Hero() {
     const containerRef = useRef(null);
@@ -16,12 +18,9 @@ export default function Hero() {
                     style={{ y }}
                 >
                     <img
-                        src="/botanical_hero.webp"
+                        src={bgImage}
                         alt="Serene Floral Arrangement"
                         className="w-full h-full object-cover scale-110"
-                        onError={(e) => {
-                            e.target.src = "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=1920&q=80";
-                        }}
                     />
                 </motion.div>
                 <div className="absolute inset-0 bg-gradient-to-b from-cream-50/20 via-transparent to-cream-50/80"></div>
