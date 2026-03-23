@@ -1,22 +1,34 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function Contact() {
     const [formState, setFormState] = useState('idle');
+    const timeouts = useRef([]);
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        const timeoutRefs = timeouts.current;
+        return () => timeoutRefs.forEach(clearTimeout);
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setFormState('sending');
 
+        try {
+            const t1 = setTimeout(() => {
+                setFormState('success');
+                e.target.reset();
 
-        setTimeout(() => {
-            setFormState('success');
-            e.target.reset();
-
-            setTimeout(() => {
-                setFormState('idle');
-            }, 3000);
-        }, 1500);
+                const t2 = setTimeout(() => {
+                    setFormState('idle');
+                }, 3000);
+                timeouts.current.push(t2);
+            }, 1500);
+            timeouts.current.push(t1);
+        } catch (error) {
+            setFormState('idle');
+            console.error('Submission failed', error);
+        }
     };
 
     return (

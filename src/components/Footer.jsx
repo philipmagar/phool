@@ -32,7 +32,7 @@ export default function Footer() {
                         </ul>
                     </div>
                     <div>
-                        <h4 className="font-serif text-xl mb-8 text-blush">Availble</h4>
+                        <h4 className="font-serif text-xl mb-8 text-blush">Available</h4>
                         <ul className="space-y-4 text-cream-100/50 text-sm leading-relaxed">
                             <li>Tuesday - Saturday</li>
                             <li>10:00am - 7:00pm</li>

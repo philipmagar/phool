@@ -1,8 +1,8 @@
 import { motion as Motion } from "framer-motion";
 
-import tulip from "../assets/images/tulip.png";
+import tulip from "../assets/images/bg.jpg";
 import cosmos from "../assets/images/cosmos.jpg";
-import boquiet from "../assets/images/boquiet.jpg";
+import boquet from "../assets/images/boquet.jpg";
 
 const collections = [
   {
@@ -23,7 +23,7 @@ const collections = [
     title: "Artisanal Ivory",
     description: "Premium white lilies and eucalyptus accents",
     price: "From $210",
-    image: boquiet,
+    image: boquet,
     tag: "Premium",
   },
 ];

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('home');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -18,11 +19,37 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useEffect(() => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        const sections = ['home', 'collections', 'services', 'testimonials', 'about', 'faq', 'contact'];
+        
+        sections.forEach((sectionId) => {
+            const element = document.getElementById(sectionId);
+            if (element) observer.observe(element);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
     const navLinks = [
-        { name: 'Home', href: '#home' },
-        { name: 'Collections', href: '#collections' },
-        { name: 'Services', href: '#services' },
-        { name: 'About', href: '#about' },
+        { name: 'Home', href: '#home', id: 'home' },
+        { name: 'Collections', href: '#collections', id: 'collections' },
+        { name: 'Services', href: '#services', id: 'services' },
+        { name: 'About', href: '#about', id: 'about' },
     ];
 
     return (
@@ -57,21 +84,29 @@ export default function Navbar() {
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className={`transition-colors font-medium tracking-widest text-[11px] uppercase relative group ${isScrolled ? 'text-espresso/80 hover:text-eucalyptus' : 'text-espresso/80 hover:text-eucalyptus'
-                                    }`}
+                                className={`transition-all duration-300 font-medium tracking-widest text-[11px] uppercase relative group ${
+                                    activeSection === link.id 
+                                    ? 'text-eucalyptus' 
+                                    : 'text-espresso/80 hover:text-eucalyptus'
+                                }`}
                             >
                                 {link.name}
-                                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-eucalyptus`}></span>
+                                <span 
+                                    className={`absolute -bottom-1 left-0 h-0.5 transition-all duration-300 bg-eucalyptus ${
+                                        activeSection === link.id ? 'w-full' : 'w-0 group-hover:w-full'
+                                    }`}
+                                ></span>
                             </a>
                         ))}
                         <motion.a
                             href="#contact"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className={`px-7 py-2.5 rounded-full shadow-lg text-[11px] uppercase tracking-widest font-bold transition-all ${isScrolled
-                                ? 'bg-eucalyptus text-white hover:bg-eucalyptus-dark'
+                            className={`px-7 py-2.5 rounded-full shadow-lg text-[11px] uppercase tracking-widest font-bold transition-all ${
+                                activeSection === 'contact'
+                                ? 'bg-espresso text-white'
                                 : 'bg-eucalyptus text-white hover:bg-eucalyptus-dark'
-                                }`}
+                            }`}
                         >
                             Enquire
                         </motion.a>
@@ -102,7 +137,9 @@ export default function Navbar() {
                                 <a
                                     key={link.name}
                                     href={link.href}
-                                    className="block text-espresso text-sm tracking-widest uppercase font-medium hover:text-eucalyptus transition-colors"
+                                    className={`block text-sm tracking-widest uppercase font-medium transition-colors ${
+                                        activeSection === link.id ? 'text-eucalyptus' : 'text-espresso hover:text-eucalyptus'
+                                    }`}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.name}
@@ -110,7 +147,9 @@ export default function Navbar() {
                             ))}
                             <a
                                 href="#contact"
-                                className="block text-espresso text-sm tracking-widest uppercase font-medium hover:text-eucalyptus transition-colors"
+                                className={`block text-sm tracking-widest uppercase font-medium transition-colors ${
+                                    activeSection === 'contact' ? 'text-eucalyptus' : 'text-espresso hover:text-eucalyptus'
+                                }`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Contact
@@ -122,3 +161,4 @@ export default function Navbar() {
         </motion.nav>
     );
 }
+
